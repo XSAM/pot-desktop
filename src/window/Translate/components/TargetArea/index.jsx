@@ -505,6 +505,11 @@ export default function TargetArea(props) {
                             />
                         ) : (
                             <div>
+                                {result['word'] && (
+                                    <div className={`text-[${appFontSize+4}px] mr-[12px] font-bold`}>
+                                        {result['word']}
+                                    </div>
+                                )}
                                 {result['pronunciations'] &&
                                     result['pronunciations'].map((pronunciation) => {
                                         return (

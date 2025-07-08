@@ -17,7 +17,8 @@ class Explanation {
 }
 
 class WordTranslateResult {
-    constructor(pronunciations, explanations, sentence) {
+    constructor(word, pronunciations, explanations, sentence) {
+        this.word = word;
         this.pronunciations = pronunciations;
         this.explanations = explanations;
         this.sentence = sentence;
@@ -90,7 +91,8 @@ export async function translate(text, from, to) {
     }
 
     const resultMap = [...entryNodes].reduce((dict, entryNode) => {
-        const wordTranslateResult = dict['result'] || new WordTranslateResult([], [], []);
+        const word = entryNode.querySelector('.hw.dhw').innerText;
+        const wordTranslateResult = dict['result'] || new WordTranslateResult(word, [], [], []);
 
         if (wordTranslateResult.pronunciations.length === 0) {
             const pronunciationNodes = entryNode.querySelectorAll('.dpron-i');

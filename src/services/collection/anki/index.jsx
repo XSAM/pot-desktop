@@ -101,7 +101,7 @@ export async function collection(source, target, options = {}) {
             deckName: 'Pot',
             modelName: 'Pot Card 2',
             fields: {
-                Front: source,
+                Front: target.word ? target.word : source,
                 Back: ankiText(target),
                 Symbol1: pronunciations[0] && pronunciations[0].regionSymbol,
                 Symbol2: pronunciations[1] && pronunciations[1].regionSymbol,
