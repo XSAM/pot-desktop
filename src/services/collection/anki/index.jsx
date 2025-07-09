@@ -33,17 +33,23 @@ export async function collection(source, target, options = {}) {
                 result += '<br>';
             }
 
-            if (target.sentence) {
-                result += '<ul class="sentence">';
-                for (let sentence of target.sentence) {
-                    result += `<li><span class="sentence-source">${sentence.source}</span></li>`;
-                }
-                result += '</ul>';
-            }
+            result += ankiSentences(target);
         } else {
             return target;
         }
 
+        return result;
+    }
+
+    function ankiSentences(target) {
+        let result = '';
+        if (target.sentence) {
+            result += '<ul class="sentence">';
+            for (let sentence of target.sentence) {
+                result += `<li><span class="sentence-source">${sentence.source}</span></li>`;
+            }
+            result += '</ul>';
+        }
         return result;
     }
 
@@ -105,6 +111,7 @@ export async function collection(source, target, options = {}) {
                 Back: ankiText(target),
                 Symbol1: pronunciations[0] && pronunciations[0].regionSymbol,
                 Symbol2: pronunciations[1] && pronunciations[1].regionSymbol,
+                Sentences: ankiSentences(target),
             },
             audio: pronunciations.map((pronunciation) => {
                 return pronunciation.audio;
