@@ -96,15 +96,26 @@ export async function translate(text, from, to) {
 
         if (wordTranslateResult.pronunciations.length === 0) {
             const pronunciationNodes = entryNode.querySelectorAll('.dpron-i');
-            const pronunciations = [...pronunciationNodes].map((pronunciationNode) => {
+            const pronunciations = [...pronunciationNodes].reduce((acc, pronunciationNode) => {
                 const region = pronunciationNode.querySelector('.region').innerText;
+                
+                // Skip if we've already seen this region
+                if (acc.has(region)) {
+                    return acc;
+                }
+                
                 const symbol = pronunciationNode.querySelector('.pron').innerText;
                 let voice = pronunciationNode.querySelector('.daud source').src;
                 voice = voice.replace(/^https?:\/\/[^/]+/, 'https://dictionary.cambridge.org');
                 voice = voice.replace(/^tauri:\/\/[^/]+/, 'https://dictionary.cambridge.org');
-                return new Pronunciation(region, symbol, voice);
-            });
-            wordTranslateResult.pronunciations.push(...pronunciations);
+                
+                acc.set(region, new Pronunciation(region, symbol, voice));
+                return acc;
+            }, new Map());
+
+            // Convert Map values back to array
+            const uniquePronunciations = Array.from(pronunciations.values());
+            wordTranslateResult.pronunciations.push(...uniquePronunciations);
         }
 
         const wordPos = entryNode.querySelector('.posgram')?.innerText;
