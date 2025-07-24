@@ -113,8 +113,9 @@ export async function translate(text, from, to) {
                 return acc;
             }, new Map());
 
-            // Convert Map values back to array
-            const uniquePronunciations = Array.from(pronunciations.values());
+            // Convert Map values back to array and sort by region.
+            // Sorting gives you the stable order of pronunciations.
+            const uniquePronunciations = Array.from(pronunciations.values()).sort((a, b) => a.region.localeCompare(b.region));
             wordTranslateResult.pronunciations.push(...uniquePronunciations);
         }
 
